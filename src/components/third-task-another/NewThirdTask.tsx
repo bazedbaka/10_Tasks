@@ -37,7 +37,21 @@ export const NewThirdTask = () => {
   const [activeQuethionIndex, setActiveQuethionIndex] = useState<number>(0);
   const [userAnswers, setUserAnswers] = useState<UserAnswers[]>([]);
   const [testSubmit, setTestSubmite] = useState<boolean>(false);
+  const [answerOnAllQuethions, setanswerOnAllQuethions] =
+    useState<boolean>(false);
 
+  /*   const checkAnswer = () => {
+    userAnswers.forEach((answer) => {
+      let getAnswer: number = 0;
+      if (answer.userAnswer !== "") {
+        return (getAnswer = getAnswer + 1);
+      }
+      if (getAnswer === userAnswers.length) {
+        
+        setanswerOnAllQuethions(true);
+      }
+    });
+  }; */
   const toNextQuetion = () => {
     if (activeQuethionIndex < tests.length - 1)
       setActiveQuethionIndex(activeQuethionIndex + 1);
@@ -71,16 +85,20 @@ export const NewThirdTask = () => {
 
   const chekAndEndTest = () => {
     const copyAnswers = [...userAnswers];
+
     tests.forEach((queshion) => {
       const findIndex = copyAnswers.findIndex(
         (item) => item.id === queshion.id
       );
-      if (copyAnswers[findIndex].userAnswer === String(queshion.right)) {
-        copyAnswers[findIndex].isCorect = true;
-        setUserAnswers(copyAnswers);
+      if (copyAnswers[findIndex].userAnswer !== "") {
+        if (copyAnswers[findIndex].userAnswer === String(queshion.right)) {
+          copyAnswers[findIndex].isCorect = true;
+          setUserAnswers(copyAnswers);
+          setTestSubmite(true);
+          return;
+        }
       }
     });
-    setTestSubmite(true);
   };
 
   useEffect(() => {
@@ -103,7 +121,7 @@ export const NewThirdTask = () => {
               </div>
             ) : (
               <div className="text-red-500">
-                Ваша відповідь:{" "}
+                Ваша відповідь:
                 {question.answers[Number(userAnswers[index].userAnswer)]}
                 неправильна, правильна відповідь:
                 {question.answers[Number(question.right)]}
@@ -147,6 +165,11 @@ export const NewThirdTask = () => {
           );
       })}
 
+      {activeQuethionIndex == tests.length - 1 && !answerOnAllQuethions && (
+        <div className="bg-red-600 w-[33%] m-1">
+          Будь ласка заповніть усі поля з відповідями!
+        </div>
+      )}
       {activeQuethionIndex == tests.length - 1 && (
         <button
           onClick={chekAndEndTest}
