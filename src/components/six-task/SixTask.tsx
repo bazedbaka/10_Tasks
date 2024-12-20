@@ -27,8 +27,7 @@ const SixTask = () => {
   const [tasks, setTasks] = useState<ToDoList[]>(toDoList);
   const [newTask, setNewTask] = useState("");
 
-  //const [isEditNow, setIsEditNow] = useState("");
-  const setANewTask = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const createNewTask = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTask(event.target.value);
   };
 
@@ -53,7 +52,7 @@ const SixTask = () => {
       setTasks(copyOfTasks);
     }
   };
-  const CompliteTask = (id: number) => {
+  const compliteTask = (id: number) => {
     const copyOfTasks = [...tasks];
     const findIndex = copyOfTasks.findIndex((task) => task.id === id);
     if (findIndex !== -1) {
@@ -61,25 +60,25 @@ const SixTask = () => {
       setTasks(copyOfTasks);
     }
   };
-  //const editTask = () => {};
-  const AddTaskToList = () => {
+
+  const addTaskToList = () => {
     if (!newTask.length) {
       return;
     }
     const idForTask = Date.now();
     const copyOfTasks = [...tasks];
     copyOfTasks.push({
-      id: /* copyOfTasks.length + 1 */ idForTask,
+      id: idForTask,
       task: newTask,
       isComplete: false,
       isEditNow: false,
     });
-    console.log(copyOfTasks);
+
     setTasks(copyOfTasks);
     setNewTask("");
   };
 
-  const delTaskFromList = (id: number) => {
+  const deleteTaskFromList = (id: number) => {
     const copyOfNewTasks = tasks.filter((tasks) => tasks.id !== id);
     setTasks(copyOfNewTasks);
   };
@@ -92,11 +91,11 @@ const SixTask = () => {
           className="text-black"
           type="text"
           value={newTask}
-          onChange={setANewTask}
+          onChange={createNewTask}
         />
         <button
           className="border bg-purple-600 rounded-2xl"
-          onClick={AddTaskToList}
+          onClick={addTaskToList}
         >
           Додати до списку
         </button>
@@ -105,48 +104,47 @@ const SixTask = () => {
         {tasks.map((task) => {
           if (!task.isEditNow) {
             return (
-              <React.Fragment key={task.task}>
-                <div className="flex  border rounded-2xl justify-around gap-7">
-                  <input
-                    type="checkbox"
-                    checked={task.isComplete}
-                    onChange={() => CompliteTask(task.id)}
-                  />
-                  <div
-                    className={
-                      task.isComplete ? "line-through text-xl" : "text-xl"
-                    }
-                  >
-                    {task.task}
-                  </div>
-                  <button
-                    className="border bg-lime-600"
-                    onClick={() => saveChanges(task.id)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="border bg-red-600"
-                    onClick={() => delTaskFromList(task.id)}
-                  >
-                    Del
-                  </button>
+              <div
+                key={task.task}
+                className="flex  border rounded-2xl justify-around gap-7"
+              >
+                <input
+                  type="checkbox"
+                  checked={task.isComplete}
+                  onChange={() => compliteTask(task.id)}
+                />
+                <div
+                  className={
+                    task.isComplete ? "line-through text-xl" : "text-xl"
+                  }
+                >
+                  {task.task}
                 </div>
-              </React.Fragment>
+                <button
+                  className="border bg-lime-600"
+                  onClick={() => saveChanges(task.id)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="border bg-red-600"
+                  onClick={() => deleteTaskFromList(task.id)}
+                >
+                  Del
+                </button>
+              </div>
             );
           } else {
             return (
-              <React.Fragment key={task.id}>
-                <div className="flex gap-3">
-                  <input
-                    className="text-black"
-                    type="text"
-                    value={task.task}
-                    onChange={(e) => changeTaskValue(e, task.id)}
-                  />
-                  <button onClick={() => saveChanges(task.id)}>Save</button>
-                </div>
-              </React.Fragment>
+              <div key={task.id} className="flex gap-3">
+                <input
+                  className="text-black"
+                  type="text"
+                  value={task.task}
+                  onChange={(e) => changeTaskValue(e, task.id)}
+                />
+                <button onClick={() => saveChanges(task.id)}>Save</button>
+              </div>
             );
           }
         })}

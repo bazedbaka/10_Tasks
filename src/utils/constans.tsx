@@ -6,6 +6,8 @@ import { NewThirdTask } from "../components/third-task-another/NewThirdTask";
 import FourthTask from "../components/fourth-task/FourthTask";
 import FifthTask from "../components/fifth-task/FifthTask";
 import SixTask from "../components/six-task/SixTask";
+import EightTask from "../components/tic-tac-toe/EightTask";
+import EleventhTask from "../components/eleventh-task/EleventhTask";
 
 export type Task = {
   number: number;
@@ -41,5 +43,13 @@ export const taskList = [
   {
     number: 7,
     task: <SixTask />,
+  },
+  {
+    number: 8,
+    task: <EightTask />,
+  },
+  {
+    number: 9,
+    task: <EleventhTask />,
   },
 ];
